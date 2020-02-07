@@ -1,0 +1,59 @@
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+	<script type = "text/javascript">
+	$.ajaxSetup({ cache: false });
+		function mensaje(re){
+			alert(re);
+		}
+		function callBack(response){
+			var usuario = null;
+			if(response.responseText!=""){
+				 usuario = JSON.parse(response.responseText);
+				}
+			if(usuario!=null){
+					mensaje("Se creo el usuario correctamente");
+			}else{
+					mensaje("hubo un problema al guardar el usuario");
+			}
+		
+		}
+		function insertar(){
+			var nom = document.getElementById("nom").value;
+			var ape = document.getElementById("ape").value;
+			var json ='{"nombre":"'+nom+'","apellidos":"'+ape+'","procesado":0}';
+			$.ajax({
+            url: "http://localhost:9090/usuario/insertar",
+            contentType: "application/json",
+            data: json,
+            dataType: "json",
+            type: 'POST',
+            complete:callBack});
+		}
+         
+    </script>
+</head>
+
+<body>
+	<h1>Prueba</h1>
+
+    		<div>
+       			<label for="nom">Nombre:</label>
+        		<input type="text" id="nom" />
+   		</div>
+    		<div>
+       			<label for="ape">Apellido:</label>
+        		<input type="text" id="ape" />
+    		</div>
+    		
+    		<input type="button" onclick = "insertar()" value="Registrar" />
+    		<input type="button" onclick = "location.href='index1.html'" value="Pagina 2" />
+    		<label id = "f"></label>
+	 </body>
+ </html>

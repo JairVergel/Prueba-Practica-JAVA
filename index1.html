@@ -1,0 +1,126 @@
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type = "text/javascript">
+	$.ajaxSetup({ cache: false });
+	var listaProcesar = "[";
+	var tableName="";
+	function mensaje(re){
+			alert(re);
+		}
+		function reload(){
+			setTimeout('document.location.reload()',250);
+		}
+	
+		
+		function loadUsuarios(listaProcesar){
+		if(listaProcesar==0){
+			tableName="Np";
+		}else{
+			tableName="P";
+		}
+		$.ajax({
+			 url: "http://localhost:9090/usuario/"+listaProcesar,
+			 type: 'GET',
+             dataType: "json",
+             complete: callBack
+         
+             });
+		}
+		function callBack(response) {
+		if(response.responseText!=""){
+				var lista = JSON.parse(response.responseText);
+             	var main;
+             	document.getElementById(tableName).innerHTML = "";
+             	if(tableName == "Np"){
+             	 main ="<tr> <th>Nombre</th> <th>Apellido</th> <th >Seleccionar</th> </tr>";
+             	}else{
+             	 main ="<tr> <th>Nombre</th> <th>Apellido</th> </tr>";
+             	}
+				for(i=0;i < lista.length; i++){
+					if(tableName == "Np"){
+	             	 main += '<tr id = "tr'+lista[i].id+'"><td id = "name'+lista[i].id+'">'+lista[i].nombre+"</td>"+'<td id = "ape'+lista[i].id+'">'+lista[i].apellidos+'</td>'+'<td><input id="'+lista[i].id+'" type="checkbox" onclick = "checkTabla(this)"></td></tr>';
+	             	}else{
+	             	 main += '<tr id = "tr'+lista[i].id+'"><td id = "name'+lista[i].id+'">'+lista[i].nombre+"</td>"+'<td id = "ape'+lista[i].id+'">'+lista[i].apellidos+'</td></tr>';
+	             	}
+				}
+		
+		
+				document.getElementById(tableName).innerHTML = main;
+				}
+				if(tableName == "P"){
+					loadUsuarios(0);
+				}
+				listaProcesar="[";
+     			
+            }
+
+		function actualizarTabla(p){
+			if(listaProcesar=="["){
+			mensaje("debe seleccionar un registro");
+			}else{
+			listaProcesar = listaProcesar + "]";
+			$.ajax({
+			 url: "http://localhost:9090/usuario/procesar",
+			 type: 'PUT',
+			 contentType: "application/json",
+			 data: listaProcesar,
+             dataType: "json",
+             complete: reload()
+             });	
+             }
+             
+		}
+		
+		function checkTabla(ch){
+		
+			
+			var nombre = document.getElementById("name"+ch.id);
+			var apellido = document.getElementById("ape"+ch.id);
+			var json ='{"id":'+ch.id+',"nombre":"'+nombre.innerHTML+'","apellidos":"'+apellido.innerHTML+'","procesado":0}';
+			if(!ch.checked){
+				listaProcesar = listaProcesar.replace(json,"");
+			}else{
+				if(listaProcesar=="["){
+					listaProcesar = listaProcesar + json;
+				}else{
+					listaProcesar = listaProcesar + "," + json;
+				}
+				
+			}
+		}
+         
+    </script>
+</head>
+
+<body onLoad="loadUsuarios(1);">
+	<h1>Usuarios</h1>
+	<table>
+	<tr>
+	<td>
+	<h2 align="left">No Procesados</h2>
+	
+	<table id = "Np">
+	
+	
+  </table>
+	</td>
+	<td>
+	<input  type="button" onclick = "actualizarTabla()" value="Procesar" />
+	<input type="button" onclick = "location.href='index.html'" value="Pagina 1" />
+	</td>
+	<td>
+	<h3 align="right">Procesados</h3> 
+
+	<table id = "P">
+  </table>
+  </td>
+</tr>
+</table>	
+
+</body>
+
+</html>
