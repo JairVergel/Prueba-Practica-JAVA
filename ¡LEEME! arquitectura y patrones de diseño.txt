@@ -1,0 +1,13 @@
+La presente prueba fue programada en un proyecto MAVEN JAVA ECLIPSE con arquitectura:
+
+-spring boot
+-jpa
+-base de datos h2
+-mvc
+-ejb
+
+Utilié el patron de diseño facade el cual implemente en la clase UsuarioRepository usando la fachada abstracta por defecto de jpa.
+
+Para ejecutar el proyecto realice los siguientes pasos: abra la carpeta src/main/java luego abra el paquete com.springboot2.pruebajairvergeljpacruudapp y oprima click derecho sobre la clase Application.java, luego seleccione Run As y corra la aplicacion como Java Application (si por alguna razon poco probable aparece el error puerto 9090 en uso reinicie eclipse para liberar el puerto y realice el proceso nuevamente).
+
+Despues de correr la app dirijase a la carpeta pruebajairvergel-jpa-h2-crud y ejecute el archivo index.html con internet explorer, asegurese de oprimir el boton de permitir contenido bloqueado.
